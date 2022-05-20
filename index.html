@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Twitter Feed</title>
+</head>
+
+<style>
+  html {
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    letter-spacing: 1.5px;
+    color: white;
+  }
+
+  body{
+    background-color: black;
+  }
+  .topicsContainer {
+    display: flex;
+  }
+
+  .topicsContainer>* {
+    width: 100%;
+    display: none;
+  }
+
+  .topicsContainer>*.show {
+    display: block;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+    padding: 30px;
+  }
+
+  button {
+    outline: none;
+    background-color: #16ccf027;
+    border: 2px solid #16cbf0;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    color: #16cbf0;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 7.5px 30px;
+    margin-right: 15px;
+  }
+
+  button:hover {
+    transition: all 0.3s ease;
+    opacity: 1;
+    color: white;
+    background-color: #16cbf0;
+    border: 2px solid #16cbf0;
+  }
+
+  button:focus {
+    transition: all 03s ease;
+
+  }
+  .topicContainer>h1{
+    background-color: #555555;
+    padding: 30px;
+  }
+  .tweetsContainer{
+    background-color: #292929;
+    padding: 10px 30px;
+  }
+</style>
+
+<body>
+  <div class="controls">
+    <button class="toggler" id="gdlContainer">Guadalajara</button>
+    <button class="toggler" id="mxContainer">México</button>
+    <button class="toggler" id="ussrContainer">Rusia</button>
+  </div>
+  <div class="topicsContainer">
+    <div class="topicContainer mxContainer show">
+      <h1>México</h1>
+      <div class="mexico tweetsContainer">
+
+      </div>
+
+    </div>
+    <div class="topicContainer gdlContainer">
+      <h1>Guadalajara</h1>
+      <div class="guadalajara tweetsContainer">
+
+      </div>
+
+    </div>
+    <div class="topicContainer ussrContainer">
+      <h1>Rusia</h1>
+      <div class="russia tweetsContainer">
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+  <script>
+
+    $(".toggler").click(function (e) {
+      e.preventDefault()
+      $(".topicContainer").removeClass("show")
+      $(`.${e.currentTarget.id}`).addClass("show")
+    })
+
+    var socket = io.connect('http://localhost:3000');
+    socket.on('tweets', function (tweets) {
+      Object.keys(tweets).forEach(topicName => {
+        $(`.${topicName}`).children().remove()
+        tweets[topicName].forEach(tweet => {
+          $(`.${topicName}`).append(`
+                <p id="${tweet.id}">${tweet.text}</p>
+            `)
+        })
+      })
+    })
+  </script>
+  <div id="tweetd"></div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Twitter Feed Fun</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            letter-spacing: 1.5px;
+        }
+
+        .badInput {
+            background-color: red;
+        }
+
+        .content {
+            display: flex;
+            justify-content: space-between;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .content {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .content>*:first-child {
+            width: 20%;
+            background-color: #242424;
+        }
+
+        .background {
+            height: 100vh;
+            width: 80%;
+            background-size: cover;
+            background-image: url(/public/bg.jpg);
+            filter: brightness(0.3);
+        }
+
+        button {
+            outline: none;
+            background-color: #16ccf027;
+            border: 2px solid #16cbf0;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: #16cbf0;
+            font-weight: bold;
+            border-radius: 5px;
+            padding: 7.5px 30px;
+        }
+
+        button:hover {
+            transition: all 0.3s ease;
+            opacity: 1;
+            color: white;
+            background-color: #16cbf0;
+            border: 2px solid #16cbf0;
+        }
+
+        button:focus {
+            transition: all 03s ease;
+
+        }
+
+        .inputContainer {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        input {
+            height: 33px;
+            width: 100%;
+            border: 2px solid #f0f0f0;
+            border: none;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            padding-left: 10px;
+        }
+
+        input:focus {
+            outline: none;
+            background-color: #dadada;
+        }
+
+        .inputContainer>label {
+            position: absolute;
+            top: 7.5px;
+            left: 10px;
+            transition: all 0.2s ease;
+            cursor: text;
+            font-size: 14px;
+            color: #242424;
+            font-variant: all-petite-caps;
+        }
+
+        input:focus+label {
+            position: absolute;
+            transform: translateY(-27px);
+            transition: all 0.2s ease;
+            color: white;
+
+        }
+
+        input:not(:focus):required:valid {
+            border: 2px solid #16cbf0;
+        }
+
+        input:not(:focus):required:valid+label {
+            transform: translateY(-27px);
+            color: #16cbf0;
+            font-weight: bold;
+        }
+
+        .form {
+            padding: 30px 2vw;
+            position: relative;
+        }
+
+        #feedback {
+            background: #5e1616;
+            border: 1px solid red;
+            padding: 15px;
+            color: antiquewhite;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            display: block;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<div class="content">
+    <div class="form">
+        <div class="inputContainer">
+            <h1 style="color:white">Blackstone Challange</h1>
+        </div>
+        <div class="inputContainer hidden" id="feedback">
+        </div>
+        <div class="inputContainer">
+            <input required id="name" type="text" name="username">
+            <label for="name">Username</label>
+        </div>
+        <div class="inputContainer">
+            <input required id="password" type="text" name="password">
+            <label for="name">Password</label>
+        </div>
+        <button id="submit">login</button>
+    </div>
+    <div class="background"></div>
+</div>
+
+<body>
+</body>
+<script>
+    // input validations
+    var anchors = document.getElementsByTagName('input')
+
+    document.getElementById("submit").addEventListener('click', function () {
+
+        let form = {}
+        for (var z = 0; z < anchors.length; z++) {
+            var elem = anchors[z];
+            form[elem.getAttribute("name")] = elem.value
+        }
+
+        console.log(form);
+        if (form.username !== "" && form.password !== "") {
+            document.getElementById("feedback").classList.add("hidden")
+        } else {
+            document.getElementById("feedback").classList.remove("hidden")
+            document.getElementById("feedback").textContent = "All fields are required"
+            return
+        }
+
+
+        fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(form)
+        })
+            .then(function (response) {return response.json()})
+            .then(function (data) {
+                if (!data.status) {
+                    document.getElementById("feedback").classList.remove("hidden")
+                    document.getElementById("feedback").textContent = data.message
+                    return
+                }
+                window.location.replace("/")
+            }).catch((err) => {
+                console.log(err);
+            })
+
+    }, false);
+
+</script>
+
+</html>
