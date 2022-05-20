@@ -17,7 +17,7 @@ jobs:
       - run:
           name: Deploy to server
           command: |
-            ssh root@143.244.150.162 -o StrictHostKeyChecking=no 'npm install && git pull https://utajaraj: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@github.com/utajaraj/blackstone.git main'
+            ssh root@143.244.150.162 -o StrictHostKeyChecking=no 'cd blackstone && npm install && git pull https://utajaraj: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@github.com/utajaraj/blackstone.git main'
 
 
 # Invoke jobs via workflows
