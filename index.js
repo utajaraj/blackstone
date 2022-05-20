@@ -6,7 +6,7 @@ var express = require('express'),
   server = http.createServer(app),
   { Server } = require('socket.io'),
   io = new Server(server),
-  port = 3000 || process.env.PORT,
+  port = 80 || process.env.PORT,
   tweets = require("./getTweets")
   
 require("dotenv").config()
