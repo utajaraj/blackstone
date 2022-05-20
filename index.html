@@ -115,7 +115,7 @@
       $(`.${e.currentTarget.id}`).addClass("show")
     })
 
-    var socket = io.connect('http://localhost:3000');
+    var socket = io.connect('/');
     socket.on('tweets', function (tweets) {
       Object.keys(tweets).forEach(topicName => {
         $(`.${topicName}`).children().remove()
